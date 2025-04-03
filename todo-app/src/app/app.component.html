@@ -1,0 +1,13 @@
+<h1>My Todo App</h1>
+
+<form (ngSubmit)="addTask()">
+  <input type="text" [(ngModel)]="title" name="title" placeholder="Title" required />
+  <input type="text" [(ngModel)]="description" name="description" placeholder="Description" />
+  <button type="submit">Add Task</button>
+</form>
+
+<app-task-list
+  [tasks]="tasks"
+  (delete)="deleteTask($event)"
+  (toggleComplete)="updateTaskStatus($event)">
+</app-task-list>
