@@ -1,8 +1,17 @@
-<ul>
-    <li *ngFor="let task of tasks">
-      <input type="checkbox" [checked]="task.completed" (change)="onToggle(task)" />
-      {{ task.title }} - {{ task.description }}
-      <button (click)="onDelete(task.id!)">🗑</button>
-    </li>
-  </ul>
+<form #form="ngForm" (ngSubmit)="onSubmit(form)">
+    <input
+      type="text"
+      name="title"
+      [(ngModel)]="task.title"
+      placeholder="Title"
+      required
+    />
+    <input
+      type="text"
+      name="description"
+      [(ngModel)]="task.description"
+      placeholder="Description"
+    />
+    <button type="submit">Add Task</button>
+  </form>
   
