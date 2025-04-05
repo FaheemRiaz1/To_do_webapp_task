@@ -1,0 +1,130 @@
+/* ================================
+   CONTAINER & HEADER
+================================= */
+
+.dashboard-container {
+    width: 100%;
+    max-width: 600px !important;
+    max-height: 90vh;             
+    overflow-y: auto;             
+    margin: 40px auto;
+    background-color: #f0f4ff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  
+  .dashboard-header {
+    background-color: #a682f8;
+    color: white;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  
+  /* ================================
+     FORM
+  ================================= */
+  
+  .add-list-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  
+  .add-list-form input {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+  
+  .add-list-form button {
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .add-list-form button:hover {
+    background-color: #3d37c3;
+  }
+  
+  /* ================================
+     LIST CONTAINER (SCROLLABLE)
+  ================================= */
+  
+  .todo-lists-container {
+    max-height: 450px;
+    overflow-y: auto;
+    padding-right: 6px;
+  }
+  
+  .todo-lists-container::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .todo-lists-container::-webkit-scrollbar-thumb {
+    background-color: #a682f8;
+    border-radius: 4px;
+  }
+  
+  /* ================================
+     LIST ITEM (CARD)
+  ================================= */
+  
+  .todo-list {
+    background-color: white;
+    padding: 18px 16px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .todo-list:hover {
+    background-color: #f4f4ff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+  
+  /* ================================
+     TEXT & STATS
+  ================================= */
+  
+  .todo-title {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  
+  .todo-stats {
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .todo-stats i {
+    margin-right: 6px;
+    font-style: normal;
+  }
+  
+  .total-icon {
+    color: #666;
+  }
+  
+  .completed-icon {
+    color: #4CAF50;
+    font-weight: bold;
+  }
+  

@@ -1,0 +1,17 @@
+# Root node_modules
+node_modules/
+
+# Backend
+/backend/node_modules/
+/backend/dist/
+/backend/.env
+
+# Angular App
+/todo-app/node_modules/
+/todo-app/dist/
+/todo-app/.env
+
+# General
+*.log
+.DS_Store
+.env

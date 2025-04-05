@@ -1,0 +1,38 @@
+<div class="dashboard-container">
+    <div class="dashboard-header">
+      Dashboard
+    </div>
+  
+    <form class="add-list-form" (ngSubmit)="onSubmit()" #listForm="ngForm">
+      <input
+        type="text"
+        name="title"
+        [(ngModel)]="newListTitle"
+        required
+        placeholder="Enter new list title"
+      />
+      <button type="submit">+</button>
+    </form>
+  
+    <!-- 👇 Wrap list display in a scrollable container -->
+    <div class="todo-lists-container">
+        <div *ngFor="let list of lists" class="todo-list" (click)="onSelect(list)">
+          <div class="todo-title">
+            {{ list.title }} - ID: {{ list.list_id }}
+          </div>
+      
+          <div *ngIf="list.stats" class="todo-stats">
+            <span>
+              <i class="total-icon">📝</i>
+              Total Tasks: {{ list.stats.totalTasks || 0 }}
+            </span>
+            <span>
+              <i class="completed-icon">✅</i>
+              Completed Tasks: {{ list.stats.completedTasks || 0 }}
+            </span>
+          </div>
+        </div>
+      </div>
+      
+  </div>
+  
