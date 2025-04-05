@@ -32,12 +32,22 @@ db.connect(err => {
         CREATE TABLE IF NOT EXISTS todos (
           id INT AUTO_INCREMENT PRIMARY KEY,
           title VARCHAR(255) NOT NULL,
-          completed BOOLEAN NOT NULL DEFAULT FALSE
+          completed BOOLEAN NOT NULL DEFAULT FALSE,
+          FOREIGN KEY (list_id) REFERENCES lists(id)
         );`;
+        const createListQuery = `
+       CREATE TABLE IF NOT EXISTS lists (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL
+  );`;
 
       db.query(createTableQuery, (err) => {
         if (err) throw err;
-        console.log('Table created or already exists.');
+        console.log('Table created or already exists of todos');
+      });
+      db.query(createListQuery, (err) => {
+        if (err) throw err;
+        console.log('Table created or already exists of lists.');
       });
     });
   });

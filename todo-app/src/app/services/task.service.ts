@@ -7,8 +7,11 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({ providedIn: 'root' })
 export class TaskService {
   private apiUrl = 'http://localhost:3000/tasks';
+  private apilistUrl = 'http://localhost:3000/lists'; // Adjust according to your actual API URL
+  
 
-  constructor(private http: HttpClient) {}
+
+constructor(private http: HttpClient) {}
 
   getTasks(): Observable<Task[]> {
     return this.http.get<Task[]>(this.apiUrl);
@@ -24,5 +27,11 @@ export class TaskService {
 
   updateTaskStatus(id: number, completed: boolean): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}/status`, { completed });
+  }
+  // getTasksByListId(listId: number): Observable<Task[]> {
+  //   return this.http.get<Task[]>(`${this.apilistUrl}/lists/${listId}/tasks`);
+  // }
+  getTasksByListId(listId: number): Observable<Task[]> {
+    return this.http.get<Task[]>(`${this.apiUrl}/${listId}/tasks`);
   }
 }

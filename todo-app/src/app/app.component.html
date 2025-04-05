@@ -3,10 +3,17 @@
 </app-task-list>
  -->
 <!-- app.component.html -->
+
+
 <app-task-form (addTask)="addTask($event)"></app-task-form>
+<!-- <router-outlet /> -->
 <!-- <app-task-list [tasks]="tasks" (delete)="onDeleteTask($event)" (toggleComplete)="onToggleTaskCompletion($event)"></app-task-list> -->
-<app-task-list
+<!-- <app-task-list
   [tasks]="tasks"
   (delete)="deleteTask($event)"
   (toggleComplete)="updateTaskStatus($event)">
-</app-task-list>
+</app-task-list> -->
+<!-- src/app/app.component.html -->
+<div class="main-container">
+  <router-outlet></router-outlet>
+</div>
