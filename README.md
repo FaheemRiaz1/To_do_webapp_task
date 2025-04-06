@@ -52,6 +52,7 @@ cd To_do_webapp_task
 ## ⚙️ Backend Setup (Node.js + Express)
 
 ### 📁 Navigate to backend folder
+ To get started, copy `.env.example` → `.env` and update the credentials as needed.
 
 ```bash
 cd backend
