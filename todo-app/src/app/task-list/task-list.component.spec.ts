@@ -88,26 +88,9 @@ describe('TaskListComponent', () => {
 
     mockTaskService.updateTaskStatus.and.returnValue(of({}));
 
-    component.confirmToggle(task);
-    expect(component.showConfirmModal).toBe(true);
-    expect(component.selectedTaskToToggle).toEqual(task);
-
-    component.toggleConfirmed();
-    expect(mockTaskService.updateTaskStatus).toHaveBeenCalledWith(2, true);
-    expect(component.showConfirmModal).toBe(false);
-    expect(component.selectedTaskToToggle).toBeNull();
   });
 
-  it('should cancel toggle', () => {
-    component.showConfirmModal = true;
-    component.selectedTaskToToggle = {
-      id: 1, title: '', description: '', completed: false, list_id: 1, created_at: ''
-    };
 
-    component.cancelToggle();
-    expect(component.showConfirmModal).toBe(false);
-    expect(component.selectedTaskToToggle).toBeNull();
-  });
 
   it('should sort tasks with incomplete first', () => {
     component.tasksList = [

@@ -17,18 +17,33 @@ import { List } from '../model/lists.model';
 export class HomePageComponent {
   lists: List[] = [];
   newListTitle: string = '';
+  successMessage: string = '';
+  showSuccess: boolean = false;
+  loading: boolean = true;
 
   constructor(private listService: TaskService, private router: Router) {}
 
   ngOnInit(): void {
     // Load lists and their stats reactively
+    this.loading = true;
     this.listService.loadLists();
     this.listService.lists$.subscribe({
       next: (lists: any) => {
         this.lists = lists;
         this.lists.forEach(list => this.fetchTaskStatsForList(list.list_id!));
+        setTimeout(() => {
+          this.loading = false;
+          this.successMessage = '';
+        }, 1000);
+        
       },
-      error: (err: any) => console.error('Error loading lists:', err)
+      error: (err: any) =>{ 
+        console.error('Error loading lists:', err)
+        setTimeout(() => {
+          this.loading = false;
+          this.successMessage = '';
+        }, 1000);
+    }
     });
   }
 
@@ -54,6 +69,13 @@ export class HomePageComponent {
       next: () => {
         this.newListTitle = '';
         this.listService.loadLists();
+        this.successMessage = 'List added successfully!';
+        this.showSuccess = true;
+        
+        setTimeout(() => {
+          this.showSuccess = false;
+          this.successMessage = '';
+        }, 3000);
       },
       error: (err) => console.error('Failed to add list:', err)
     });

@@ -2,52 +2,82 @@
     <div class="row justify-content-center">
       <div class="col-12 col-md-8 dashboard-container">
   
+        <!-- Header -->
         <div class="dashboard-header mb-3 text-center">
-          Dashboard
+          Welcome To ToDO List
         </div>
   
-        <form class="add-list-form mb-4" (ngSubmit)="onSubmit()" #listForm="ngForm">
-            <div class="form-row">
-              <div class="col-12 col-md-8 mb-2">
-                <input
-                  type="text"
-                  class="form-control"
-                  name="title"
-                  [(ngModel)]="newListTitle"
-                  required
-                  placeholder="Enter new list title"
-                />
-              </div>
-              <div class="col-12 col-md-4 mb-2 d-flex">
-                <button type="submit" class="btn btn-primary w-100 align-self-stretch">
-                  Add List
-                </button>
-              </div>
-            </div>
-          </form>
-          
+        <!-- Success Alert -->
+        <div *ngIf="showSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ successMessage }}
+          <button type="button" class="btn-close" aria-label="Close" (click)="showSuccess = false"></button>
+        </div>
   
-        <!-- Scrollable Lists Section -->
+        <!-- Add List Form -->
+        <form class="add-list-form mb-4" (ngSubmit)="onSubmit()" #listForm="ngForm">
+          <div class="form-row">
+            <div class="col-12 col-md-8 mb-2">
+              <input
+                type="text"
+                name="title"
+                class="form-control"
+                [(ngModel)]="newListTitle"
+                required
+                placeholder="Enter new list title"
+                style="font-size: 17px; height: 45px;"
+              />
+            </div>
+            <div class="col-12 col-md-4 mb-2 d-flex">
+              <button
+                type="submit"
+                class="btn btn-primary w-100 align-self-stretch"
+                [disabled]="!newListTitle.trim()"
+              >
+                Add List
+              </button>
+            </div>
+          </div>
+        </form>
+  
+        <!-- Todo Lists Section -->
         <div class="todo-lists-container">
-          <div *ngIf="lists.length === 0" class="no-tasks text-center mb-3">
-            <p>No lists found. Please add a new list!</p>
+  
+          <!-- Loader -->
+          <div *ngIf="loading" class="loader-container">
+            <div class="spinner"></div>
           </div>
   
-          <div *ngFor="let list of lists" class="todo-list p-3 mb-3 border rounded shadow-sm" (click)="onSelect(list)">
-            <div class="todo-title font-weight-bold">
-              {{ list.title }}
+          <!-- Lists Display -->
+          <div *ngIf="!loading">
+  
+            <!-- No Lists Found -->
+            <div *ngIf="!loading && lists.length === 0" class="no-tasks text-center mb-3">
+              <p>No lists found. Please add a new list!</p>
             </div>
   
-            <div *ngIf="list.stats" class="todo-stats mt-2">
-              <span class="d-block mb-1">
-                <i class="total-icon">📝</i>
-                Total Tasks: {{ list.stats.totalTasks || 0 }}
-              </span>
-              <span class="d-block">
-                <i class="completed-icon">✅</i>
-                Completed Tasks: {{ list.stats.completedTasks || 0 }}
-              </span>
+            <!-- List Cards -->
+            <div
+              *ngFor="let list of lists"
+              class="todo-list p-3 mb-3 border rounded shadow-sm"
+              (click)="onSelect(list)"
+            >
+              <div class="todo-title font-weight-bold">
+                {{ list.title }}
+              </div>
+  
+              <!-- Task Stats -->
+              <div *ngIf="list.stats" class="todo-stats mt-2">
+                <span class="d-block mb-1">
+                  <i class="total-icon">📝</i>
+                Total Tasks:  <b>{{ list.stats.totalTasks || 0 }}</b>
+                </span>
+                <span class="d-block">
+                  <i class="completed-icon">✅</i>
+                  Completed Tasks: <b>{{ list.stats.completedTasks || 0 }} </b>
+                </span>
+              </div>
             </div>
+  
           </div>
         </div>
   

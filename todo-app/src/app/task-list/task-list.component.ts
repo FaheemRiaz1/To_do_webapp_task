@@ -20,21 +20,25 @@ export class TaskListComponent implements OnInit {
   task: Partial<Task> = { title: '', description: '', list_id: null };
   tasksList: Task[] = [];
   list_id = input.required<number | null>();
-
+  successMessage = '';
+  deleteMessage = '';
+  showSuccess = false;
+  showDelete = false;
   selectedTaskToToggle: Task | null = null;
   showConfirmModal = false;
+  
 
   constructor(private taskService: TaskService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.taskService.loadTasks();
     this.route.paramMap.subscribe((params:any) => {
       const rawId = params.get('list_id');
       this.task.list_id = rawId ? parseInt(rawId, 10) : null;
-      this.taskService.loadTasks();
-
-      this.taskService.tasks$.subscribe((tasks:any) => {
-        this.tasksList = tasks.filter((task:any) => task.list_id === this.task.list_id);
-      });
+      
+    });
+    this.taskService.tasks$.subscribe((tasks:any) => {
+      this.tasksList = tasks.filter((task:any) => task.list_id === this.task.list_id);
     });
   }
 
@@ -45,6 +49,13 @@ export class TaskListComponent implements OnInit {
       this.taskService.addTask(this.task).subscribe(
         (response: any) => {
           console.log("Task added successfully", response);
+          this.successMessage = 'Task added successfully!';
+          this.showSuccess = true;
+          this.taskService.loadTasks();
+          setTimeout(() => {
+            this.showSuccess = false;
+            this.successMessage = '';
+          }, 3000);
         this.ngOnInit(); // Refresh the list
 
         },
@@ -61,8 +72,14 @@ export class TaskListComponent implements OnInit {
     this.taskService.deleteTask(id).subscribe({
       next: (response) => {
         console.log("Task deleted:", response);
-      this.ngOnInit(); // Refresh the list
-
+        this.deleteMessage = 'Task Deleted Successfully';
+        this.showDelete = true
+        setTimeout(() => {
+          this.showDelete = false;
+          this.deleteMessage = '';
+        }, 3000);
+        
+        this.ngOnInit(); // Refresh the list
         // Optionally, reload task list or filter out the task locally
       },
       error: (err) => {
@@ -97,9 +114,19 @@ export class TaskListComponent implements OnInit {
     const updatedStatus = !task.completed;
     this.taskService.updateTaskStatus(task.id!, updatedStatus).subscribe({
       next: () => {
+        this.successMessage = 'Task Has Been Completed';
+        this.showSuccess = true
+        setTimeout(() => {
+          this.showSuccess = false;
+          this.successMessage = '';
+        }, 3000);
         this.taskService.fetchTasks(); // or loadTasks() based on BehaviorSubject
       },
       error: (err) => console.error("Error updating task status:", err)
     });
   }
+  get isSubmitDisabled(): boolean {
+    return !this.task?.title?.trim();
+  }
+  
 }
