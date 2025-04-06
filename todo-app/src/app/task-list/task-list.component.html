@@ -1,48 +1,57 @@
-<div class="dashboard-container">
-    <div class="dashboard-header">
-      To Do Tasks
-    </div>
-  
-    <form class="add-task-form" #form="ngForm" (ngSubmit)="onSubmit(form)">
-      <input
-        type="text"
-        name="title"
-        [(ngModel)]="task.title"
-        placeholder="Title"
-        required
-      />
-      <input
-        type="text"
-        name="description"
-        [(ngModel)]="task.description"
-        placeholder="Description"
-      />
-      <button type="submit">
-        <i class="fas fa-plus"></i> Add Task
-      </button>
-    </form>
-  
-    <h2 class="task-title">Tasks </h2>
-    <ul class="task-list">
-        <div *ngIf="sortedTasks().length === 0" class="no-tasks">
-            <p>No Tasks found. Please add a new Task!</p>
-          </div>
-        <li *ngFor="let task of sortedTasks()" [ngClass]="{ 'completed': task.completed }">
-          <div class="task-container">
-            <!-- Toggle icon -->
-            <span class="status-icon" (click)="onToggle(task)">
-              {{ task.completed ? '✔️' : '⭕' }}
-            </span>
-      
-            <!-- Task Text -->
-            <div class="task-text">
-              <span class="task-title">{{ task.title }}</span>
-              <span class="task-desc">{{ task.description }}</span>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12 dashboard-container">
+            <div class="dashboard-header mb-3">
+                To Do Tasks
             </div>
-      
-            <!-- 🗑 Delete -->
-            <span class="delete-icon" (click)="onDelete(task.id!)">🗑️</span>
-          </div>
-        </li>
-      </ul>
-      
+        
+            <form class="add-task-form" #form="ngForm" (ngSubmit)="onSubmit(form)">
+                <div class="form-row align-items-center  justify-content-center">
+                    <div class="col-12 col-md-4 mb-2">
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="title"
+                            [(ngModel)]="task.title"
+                            placeholder="Title"
+                            required
+                        />
+                    </div>
+                    <div class="col-12 col-md-8 mb-2">
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="description"
+                            [(ngModel)]="task.description"
+                            placeholder="Description"
+                        />
+                    </div>
+                    <div class="col-12 col-md-12 mb-2">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            Add Task
+                        </button>
+                    </div>
+                </div>
+            </form>
+            
+            <h2 class="task-title mb-3">Tasks</h2>
+            <ul class="task-list list-group">
+                <div *ngIf="sortedTasks().length === 0" class="no-tasks">
+                    <p>No Tasks found. Please add a new Task!</p>
+                </div>
+                <li *ngFor="let task of sortedTasks()" [ngClass]="{ 'completed': task.completed, 'list-group-item': true }">
+                  <div class="task-container d-flex justify-content-between align-items-center">
+                    <span class="status-icon" (click)="onToggle(task)">
+                      {{ task.completed ? '✔️' : '⭕' }}
+                    </span>
+                    <div class="task-text">
+                      <span class="task-title">{{ task.title }}</span>
+                      <span class="task-desc">{{ task.description }}</span>
+                    </div>
+                    <span class="delete-icon" (click)="onDelete(task.id!)">🗑️</span>
+                  </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

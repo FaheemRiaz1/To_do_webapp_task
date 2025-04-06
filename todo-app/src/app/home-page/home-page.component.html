@@ -1,43 +1,57 @@
-<div class="dashboard-container">
-    <div class="dashboard-header">
-      Dashboard
-    </div>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 dashboard-container">
   
-    <form class="add-list-form" (ngSubmit)="onSubmit()" #listForm="ngForm">
-      <input
-        type="text"
-        name="title"
-        [(ngModel)]="newListTitle"
-        required
-        placeholder="Enter new list title"
-      />
-      <button type="submit">+</button>
-    </form>
+        <div class="dashboard-header mb-3 text-center">
+          Dashboard
+        </div>
   
-    <!-- 👇 Wrap list display in a scrollable container -->
-    <div class="todo-lists-container">
-        <div *ngIf="lists.length === 0" class="no-tasks">
+        <form class="add-list-form mb-4" (ngSubmit)="onSubmit()" #listForm="ngForm">
+            <div class="form-row">
+              <div class="col-12 col-md-8 mb-2">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="title"
+                  [(ngModel)]="newListTitle"
+                  required
+                  placeholder="Enter new list title"
+                />
+              </div>
+              <div class="col-12 col-md-4 mb-2 d-flex">
+                <button type="submit" class="btn btn-primary w-100 align-self-stretch">
+                  Add List
+                </button>
+              </div>
+            </div>
+          </form>
+          
+  
+        <!-- Scrollable Lists Section -->
+        <div class="todo-lists-container">
+          <div *ngIf="lists.length === 0" class="no-tasks text-center mb-3">
             <p>No lists found. Please add a new list!</p>
           </div>
-        
-        <div *ngFor="let list of lists" class="todo-list" (click)="onSelect(list)">
-          <div class="todo-title">
-            {{ list.title }}
-          </div>
-      
-          <div *ngIf="list.stats" class="todo-stats">
-            <span>
-              <i class="total-icon">📝</i>
-              Total Tasks: {{ list.stats.totalTasks || 0 }}
-            </span>
-            <span>
-              <i class="completed-icon">✅</i>
-              Completed Tasks: {{ list.stats.completedTasks || 0 }}
-            </span>
-            
+  
+          <div *ngFor="let list of lists" class="todo-list p-3 mb-3 border rounded shadow-sm" (click)="onSelect(list)">
+            <div class="todo-title font-weight-bold">
+              {{ list.title }}
+            </div>
+  
+            <div *ngIf="list.stats" class="todo-stats mt-2">
+              <span class="d-block mb-1">
+                <i class="total-icon">📝</i>
+                Total Tasks: {{ list.stats.totalTasks || 0 }}
+              </span>
+              <span class="d-block">
+                <i class="completed-icon">✅</i>
+                Completed Tasks: {{ list.stats.completedTasks || 0 }}
+              </span>
+            </div>
           </div>
         </div>
+  
       </div>
-      
+    </div>
   </div>
   

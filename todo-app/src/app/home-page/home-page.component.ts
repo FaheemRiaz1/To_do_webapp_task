@@ -62,9 +62,7 @@ export class HomePageComponent {
     this.listService.deleteTask(id).subscribe({
       next: (response) => {
         console.log("Task deleted:", response);
-      this.ngOnInit(); // Refresh the list
-
-        // Optionally, reload task list or filter out the task locally
+        this.ngOnInit(); // Refresh the list
       },
       error: (err) => {
         console.error("Error deleting task:", err);
