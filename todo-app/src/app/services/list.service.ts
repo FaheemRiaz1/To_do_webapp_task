@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { List } from '../model/lists.model';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environments';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
-  private apiUrl = 'http://localhost:3000/tasks';
-  private apilistUrl = 'http://localhost:3000/lists';
+   private apiUrl = `${environment.apiBaseUrl}/tasks`;
+   private apilistUrl = `${environment.apiBaseUrl}/lists`;
 
   private listsSubject = new BehaviorSubject<List[]>([]);
   public lists$ = this.listsSubject.asObservable();
@@ -25,4 +26,5 @@ export class TaskService {
   getLists(): Observable<List[]> {
     return this.http.get<List[]>(this.apilistUrl);
   }
+  
 }

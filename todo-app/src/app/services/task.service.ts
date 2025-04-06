@@ -4,11 +4,12 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { List } from '../model/lists.model';
 import { TaskStats } from '../model/stats.model';
+import { environment } from '../../environments/environments';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
-  private apiUrl = 'http://localhost:3000/tasks';
-  private apilistUrl = 'http://localhost:3000/lists';
+  private apiUrl = `${environment.apiBaseUrl}/tasks`;
+  private apilistUrl = `${environment.apiBaseUrl}/lists`;
   private listsSubject = new BehaviorSubject<List[]>([]);
   private tasksSubject = new BehaviorSubject<Task[]>([]);
   public tasks$ = this.tasksSubject.asObservable();
@@ -93,4 +94,39 @@ export class TaskService {
   addList(list: Partial<List>): Observable<Task> {
     return this.http.post<Task>(this.apilistUrl, list);
   }
+  // Save to localStorage
+   private saveToLocalStorage(key: string, data: any): void {
+    localStorage.setItem(key, JSON.stringify(data));
+  }
+  // Load from localStorage
+  private loadFromLocalStorage<T>(key: string): T | null {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) as T : null;
+  }
+  // task.service.ts
+loadTasksLC(): void {
+  const cached = this.loadFromLocalStorage<Task[]>('tasks');
+  if (cached) this.tasksSubject.next(cached);
+
+  this.http.get<Task[]>(this.apiUrl).subscribe({
+    next: (tasks) => {
+      this.saveToLocalStorage('tasks', tasks);
+      this.tasksSubject.next(tasks);
+    },
+    error: (err) => console.error('Failed to load tasks:', err),
+  });
+}
+loadListLC(): void {
+  const cached = this.loadFromLocalStorage<List[]>('lists');
+  if (cached) this.listsSubject.next(cached);
+
+  this.http.get<List[]>(this.apilistUrl).subscribe({
+    next: (lists) => {
+      this.saveToLocalStorage('lists', lists);
+      this.listsSubject.next(lists);
+    },
+    error: (err) => console.error('Failed to load tasks:', err),
+  });
+}
+
 }

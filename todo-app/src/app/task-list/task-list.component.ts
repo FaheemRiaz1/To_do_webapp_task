@@ -32,6 +32,7 @@ export class TaskListComponent implements OnInit {
 
   ngOnInit(): void {
     this.taskService.loadTasks();
+    this.taskService.loadTasksLC();
     this.route.paramMap.subscribe((params:any) => {
       const rawId = params.get('list_id');
       this.task.list_id = rawId ? parseInt(rawId, 10) : null;

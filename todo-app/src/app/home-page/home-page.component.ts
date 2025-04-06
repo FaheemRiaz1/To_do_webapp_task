@@ -27,6 +27,8 @@ export class HomePageComponent {
     // Load lists and their stats reactively
     this.loading = true;
     this.listService.loadLists();
+    this.listService.loadListLC();
+
     this.listService.lists$.subscribe({
       next: (lists: any) => {
         this.lists = lists;
@@ -75,7 +77,7 @@ export class HomePageComponent {
         setTimeout(() => {
           this.showSuccess = false;
           this.successMessage = '';
-        }, 3000);
+        }, 1000);
       },
       error: (err) => console.error('Failed to add list:', err)
     });

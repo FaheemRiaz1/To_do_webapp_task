@@ -90,8 +90,6 @@ describe('TaskListComponent', () => {
 
   });
 
-
-
   it('should sort tasks with incomplete first', () => {
     component.tasksList = [
       { id: 1, title: 'Complete', description: '', completed: false, list_id: 1, created_at: '' },
