@@ -16,9 +16,13 @@
   
     <!-- 👇 Wrap list display in a scrollable container -->
     <div class="todo-lists-container">
+        <div *ngIf="lists.length === 0" class="no-tasks">
+            <p>No lists found. Please add a new list!</p>
+          </div>
+        
         <div *ngFor="let list of lists" class="todo-list" (click)="onSelect(list)">
           <div class="todo-title">
-            {{ list.title }} - ID: {{ list.list_id }}
+            {{ list.title }}
           </div>
       
           <div *ngIf="list.stats" class="todo-stats">
@@ -30,6 +34,7 @@
               <i class="completed-icon">✅</i>
               Completed Tasks: {{ list.stats.completedTasks || 0 }}
             </span>
+            
           </div>
         </div>
       </div>

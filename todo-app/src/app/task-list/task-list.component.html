@@ -24,14 +24,17 @@
   
     <h2 class="task-title">Tasks </h2>
     <ul class="task-list">
+        <div *ngIf="sortedTasks().length === 0" class="no-tasks">
+            <p>No Tasks found. Please add a new Task!</p>
+          </div>
         <li *ngFor="let task of sortedTasks()" [ngClass]="{ 'completed': task.completed }">
           <div class="task-container">
-            <!-- ✅ Toggle icon -->
+            <!-- Toggle icon -->
             <span class="status-icon" (click)="onToggle(task)">
               {{ task.completed ? '✔️' : '⭕' }}
             </span>
       
-            <!-- 📝 Task Text -->
+            <!-- Task Text -->
             <div class="task-text">
               <span class="task-title">{{ task.title }}</span>
               <span class="task-desc">{{ task.description }}</span>
