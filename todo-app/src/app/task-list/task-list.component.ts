@@ -12,6 +12,7 @@ import { CommonModule } from "@angular/common";
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.css'],
   imports: [CommonModule, FormsModule], 
+  standalone: true 
   // any other options here like standalone, animations, etc.
 })
 

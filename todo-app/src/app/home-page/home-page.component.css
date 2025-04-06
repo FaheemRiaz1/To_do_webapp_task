@@ -62,7 +62,10 @@
   .add-list-form button:hover {
     background-color: #3d37c3;
   }
-  
+  .add-list-form[_ngcontent-ng-c3238223981] input[_ngcontent-ng-c3238223981]{
+    font-size: 17px !important;
+    height: 45px !important;
+  }
   /* ================================
      LIST CONTAINER (SCROLLABLE)
   ================================= */

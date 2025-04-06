@@ -1,58 +1,43 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TaskListComponent } from './task-list.component';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TaskService } from '../services/task.service';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
-import { CommonModule } from '@angular/common';
 import { Task } from '../model/task.model';
 
-// Create a simple mock for NgForm
-function createMockNgForm(): any {
-  return {
-    valid: true,
-    value: {
-      title: 'Test Task',
-      description: 'Do something',
-      list_id: 1
-    },
-    resetForm: jasmine.createSpy('resetForm')
-  };
-}
 describe('TaskListComponent', () => {
   let component: TaskListComponent;
   let fixture: ComponentFixture<TaskListComponent>;
-  let service: TaskService;
-  let route: ActivatedRoute;
-  let mockForm: NgForm;
-  
+  let mockTaskService: any;
+
   beforeEach(async () => {
+    mockTaskService = jasmine.createSpyObj('TaskService', [
+      'loadTasks',
+      'addTask',
+      'deleteTask',
+      'updateTaskStatus',
+      'fetchTasks'
+    ]);
+    mockTaskService.tasks$ = of([]);
+
     await TestBed.configureTestingModule({
       imports: [
-        CommonModule,
+        TaskListComponent,
         FormsModule,
-        RouterTestingModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        RouterTestingModule
       ],
-      declarations: [],
       providers: [
-        TaskListComponent,  // Providing the standalone component directly
-        {
-          provide: TaskService,
-          useValue: {
-            tasks$: of([]),
-            loadTasks: jasmine.createSpy('loadTasks'),
-            addTask: jasmine.createSpy('addTask').and.returnValue(of({})),
-            deleteTask: jasmine.createSpy('deleteTask').and.returnValue(of({})),
-            updateTaskStatus: jasmine.createSpy('updateTaskStatus').and.returnValue(of({}))
-          }
-        },
+        { provide: TaskService, useValue: mockTaskService },
         {
           provide: ActivatedRoute,
           useValue: {
-            paramMap: of(convertToParamMap({ list_id: '1' }))
+            paramMap: of({
+              get: (key: string) => '1'
+            })
           }
         }
       ]
@@ -60,8 +45,6 @@ describe('TaskListComponent', () => {
 
     fixture = TestBed.createComponent(TaskListComponent);
     component = fixture.componentInstance;
-    service = TestBed.inject(TaskService);
-    route = TestBed.inject(ActivatedRoute);
     fixture.detectChanges();
   });
 
@@ -69,43 +52,71 @@ describe('TaskListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // Add further tests here as needed
-
-
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should load tasks on initialization', () => {
-    expect(service.loadTasks).toHaveBeenCalled();
-  });
-
-  // it('should submit a valid form', () => {
-  //   expect(service.addTask).toHaveBeenCalledWith(component.task);
-  //   component.onSubmit(mockForm);
-  //   expect(mockForm.resetForm).toHaveBeenCalled();
-  // });
-
   it('should delete a task', () => {
-    const taskId = 1;
-    component.onDelete(taskId);
-    expect(service.deleteTask).toHaveBeenCalledWith(taskId);
+    mockTaskService.deleteTask.and.returnValue(of({ success: true }));
+    spyOn(component, 'ngOnInit');  // spy on refresh logic
+
+    component.onDelete(123);
+    expect(mockTaskService.deleteTask).toHaveBeenCalledWith(123);
+    expect(component.ngOnInit).toHaveBeenCalled();
   });
 
-  it('should toggle task completion', () => {
-    const task = { id: 1, completed: false } as Task;
+  it('should update task status (onToggle)', () => {
+    mockTaskService.updateTaskStatus.and.returnValue(of({}));
+    const task: Task = {
+      id: 5,
+      title: 'Test task',
+      description: 'testing',
+      completed: false,
+      list_id: 1,
+      created_at: ''
+    };
+
     component.onToggle(task);
-    expect(service.updateTaskStatus).toHaveBeenCalledWith(1, true);
+    expect(mockTaskService.updateTaskStatus).toHaveBeenCalledWith(5, true);
   });
 
-  it('should correctly sort tasks by completion status', () => {
+  it('should confirm toggle and update task', () => {
+    const task: Task = {
+      id: 2,
+      title: 'Test',
+      description: 'desc',
+      completed: false,
+      list_id: 1,
+      created_at: ''
+    };
+
+    mockTaskService.updateTaskStatus.and.returnValue(of({}));
+
+    component.confirmToggle(task);
+    expect(component.showConfirmModal).toBe(true);
+    expect(component.selectedTaskToToggle).toEqual(task);
+
+    component.toggleConfirmed();
+    expect(mockTaskService.updateTaskStatus).toHaveBeenCalledWith(2, true);
+    expect(component.showConfirmModal).toBe(false);
+    expect(component.selectedTaskToToggle).toBeNull();
+  });
+
+  it('should cancel toggle', () => {
+    component.showConfirmModal = true;
+    component.selectedTaskToToggle = {
+      id: 1, title: '', description: '', completed: false, list_id: 1, created_at: ''
+    };
+
+    component.cancelToggle();
+    expect(component.showConfirmModal).toBe(false);
+    expect(component.selectedTaskToToggle).toBeNull();
+  });
+
+  it('should sort tasks with incomplete first', () => {
     component.tasksList = [
-      { id: 2, completed: false } as Task,
-      { id: 1, completed: true } as Task
+      { id: 1, title: 'Complete', description: '', completed: false, list_id: 1, created_at: '' },
+      { id: 2, title: 'Incomplete', description: '', completed: true, list_id: 1, created_at: '' }
     ];
+
     const sorted = component.sortedTasks();
-    expect(sorted[0].id).toEqual(2);
-    expect(sorted[1].id).toEqual(1);
+    expect(sorted[0].completed).toBe(false);
+    expect(sorted[1].completed).toBe(true);
   });
 });

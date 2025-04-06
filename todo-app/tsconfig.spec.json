@@ -4,13 +4,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
-    "types": [
-      "jasmine",
-      "@angular/localize"
-    ]
+    "types": ["jest"]
   },
-  "include": [
-    "src/**/*.spec.ts",
-    "src/**/*.d.ts"
-  ]
+  "files": ["src/test.ts"],
+  "include": ["**/*.spec.ts", "**/*.test.ts", "src/**/*.ts"]
 }
